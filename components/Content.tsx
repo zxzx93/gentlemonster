@@ -16,7 +16,7 @@ function Content({ product }: Props) {
 
 	return (
 		<div className='flex h-fit w-[280px] select-none flex-col space-y-3 rounded-xl p-8 md:h-full md:w-[300px] md:p-8'>
-			<Link href={`/contentDetail/${product._id}`}>
+			<Link href={`/detail/${product._id}`}>
 				<div className='relative h-64 w-full cursor-pointer md:h-72'>
 					<Image
 						src={urlFor(product.image[0]).url()}
@@ -27,7 +27,7 @@ function Content({ product }: Props) {
 			</Link>
 
 			<div className='flex flex-1 justify-between px-3'>
-				<Link href={`/contentDetail/${product._id}`}>
+				<Link href={`/detail/${product._id}`}>
 					<div className='cursor-pointer space-y-1 text-sm text-black md:text-base'>
 						<p className='font-normal'>{product.title}</p>
 						<p className='text-[0.9em] font-light'>{product.price}원</p>
