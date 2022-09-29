@@ -3,19 +3,39 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "1.7.2",
+    "@portabletext/react": "1.0.6",
+    "@reduxjs/toolkit": "1.8.5",
+    "@sanity/image-url": "1.0.1",
     "next": "latest",
+    "next-sanity": "0.8.4",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-icons": "4.4.0"
+    "react-hot-toast": "2.4.0",
+    "react-icons": "4.4.0",
+    "react-redux": "8.0.4"
   },
   "devDependencies": {
     "@types/node": "17.0.35",
     "@types/react": "18.0.9",
     "@types/react-dom": "18.0.5",
+    "@typescript-eslint/eslint-plugin": "5.38.0",
+    "@typescript-eslint/parser": "5.38.0",
     "autoprefixer": "^10.4.7",
+    "eslint": "8.23.1",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-airbnb-typescript": "17.0.0",
+    "eslint-config-next": "12.3.1",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-import-resolver-typescript": "3.5.1",
+    "eslint-plugin-babel": "5.3.1",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-jsx-a11y": "6.6.1",
+    "eslint-plugin-prettier": "4.2.1",
     "postcss": "^8.4.14",
     "prettier": "2.7.1",
     "prettier-plugin-tailwindcss": "0.1.13",
