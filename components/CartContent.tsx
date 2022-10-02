@@ -24,10 +24,9 @@ function CartContent({ id, contents }: Props) {
 			position: 'top-right',
 		});
 	};
-	console.log(contents);
 
 	return (
-		<div className='flex flex-row  border-b border-gray-300 py-3.5 lg:flex-row lg:items-center'>
+		<div className='flex flex-row  border-b py-3.5 lg:flex-row '>
 			<div className='relative h-44 w-44'>
 				<Image
 					src={urlFor(contents[0].image[0]).url()}
@@ -36,9 +35,9 @@ function CartContent({ id, contents }: Props) {
 				/>
 			</div>
 
-			<div className='flex flex-1 items-start lg:items-center'>
+			<div className='flex flex-1 items-start'>
 				<div className='relative h-full flex-1 space-y-4'>
-					<div className='justify-items  flex h-full flex-col items-start gap-x-8 text-sm lg:flex-row lg:text-2xl'>
+					<div className='justify-items  flex h-full flex-col items-start gap-x-8 text-sm'>
 						<h4 className='font-semibold'>{contents[0].title}</h4>
 						<p className='py-1'>
 							<CurrencyFormat
@@ -61,7 +60,7 @@ function CartContent({ id, contents }: Props) {
 				</div>
 
 				<div className='flex h-full flex-col justify-between text-sm'>
-					<h4 className='fonts-semiblod lg:text-2xl'>
+					<h4 className='fonts-semiblod'>
 						<CurrencyFormat
 							value={contents.reduce((total, item) => total + item.price, 0)}
 							displayType='text'
