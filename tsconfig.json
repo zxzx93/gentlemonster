@@ -16,5 +16,6 @@
 		"incremental": true
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".eslintrc.json"],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules"],
+	"plugins": ["tailwind-scrollbar-hide"]
 }
