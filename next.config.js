@@ -1,11 +1,12 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  reactStrictMode: true,
-  images: {
-    domains: [
-      "rb.gy",
-      "images.surfacemag.com",
-      "web-resource.gentlemonster.com",
-    ],
-  },
+	reactStrictMode: true,
+	images: {
+		domains: [
+			'rb.gy',
+			'images.surfacemag.com',
+			'web-resource.gentlemonster.com',
+			'cdn.sanity.io',
+		],
+	},
 };
