@@ -13,6 +13,10 @@ interface ModalProps {
 	items: Product[];
 	groupedItemsInCart: { [key: string]: Product[] };
 	allTotalPrice: number;
+	checkout?: {
+		createCheckout: () => Promise<void>;
+		loading: boolean;
+	};
 }
 
 function Modal({
@@ -21,6 +25,7 @@ function Modal({
 	items,
 	groupedItemsInCart,
 	allTotalPrice,
+	checkout,
 }: ModalProps) {
 	const cancelButtonRef = useRef(null);
 
@@ -69,7 +74,7 @@ function Modal({
 										</Dialog.Title>
 
 										<div className='no-scrollbar mt-7 h-[calc(100vh-290px)] min-h-[calc(100vh-290px)] overflow-y-auto'>
-											<p className='text-sm text-gray-500'>
+											<div className='text-xs'>
 												{items.length > 0 ? (
 													<div className=''>
 														{Object.entries(groupedItemsInCart).map(
@@ -85,10 +90,10 @@ function Modal({
 													</div>
 												) : (
 													<div className='mt-5 text-sm'>
-														쇼핑백에 담긴 제품이 없습니다
+														<p>쇼핑백에 담긴 제품이 없습니다</p>
 													</div>
 												)}
-											</p>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -118,7 +123,8 @@ function Modal({
 											width='w-full'
 											height='h-[35px]'
 											buttonColor='black'
-											onClick={() => setShowModal(false)}
+											loading={checkout?.loading}
+											onClick={checkout?.createCheckout}
 										/>
 										<Button
 											title='자세히 보기'
