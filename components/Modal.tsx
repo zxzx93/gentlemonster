@@ -2,6 +2,7 @@ import { Dispatch, Fragment, SetStateAction, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { IoCloseOutline } from 'react-icons/io5';
 import CurrencyFormat from 'react-currency-format';
+import { useRouter } from 'next/router';
 
 import Button from './Button';
 import Content from './Content';
@@ -27,6 +28,7 @@ function Modal({
 	allTotalPrice,
 	checkout,
 }: ModalProps) {
+	const router = useRouter();
 	const cancelButtonRef = useRef(null);
 
 	return (
@@ -125,12 +127,14 @@ function Modal({
 											buttonColor='black'
 											loading={checkout?.loading}
 											onClick={checkout?.createCheckout}
+											disabled={items.length > 0 ? false : true}
 										/>
 										<Button
 											title='자세히 보기'
 											width='w-full'
 											height='h-[35px]'
-											onClick={() => setShowModal(false)}
+											buttonColor='white'
+											onClick={() => router.push('/cart')}
 										/>
 									</div>
 								</div>

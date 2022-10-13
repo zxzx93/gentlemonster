@@ -8,7 +8,8 @@ interface Props {
 	loading?: boolean;
 	padding?: string;
 	noIcon?: boolean;
-	buttonColor?: 'black' | 'white';
+	buttonColor?: 'black' | 'white' | 'gray';
+	disabled?: boolean;
 }
 
 function Button({
@@ -20,39 +21,26 @@ function Button({
 	padding,
 	noIcon,
 	buttonColor,
+	disabled,
 }: Props) {
 	return (
 		<button
 			className={`relative box-border inline-flex cursor-pointer items-center justify-center overflow-hidden border border-[#000] text-sm  ${
 				width || 'w-auto'
 			} ${padding} ${
-				buttonColor === 'black' ? 'bg-black text-white' : 'bg-white text-black'
+				buttonColor === 'black'
+					? `bg-black text-white`
+					: 'bg-white text-black'
 			}`}
 			onClick={onClick}
 			type='button'
+			disabled={disabled}
 		>
 			<span
 				className={`relative flex ${
 					height || 'h-[56px]'
 				} items-center font-medium`}
 			>
-				{/* {noIcon && (
-					<svg
-						className='relative mr-2 h-5 w-5 flex-shrink-0 text-white'
-						fill='none'
-						stroke='currentColor'
-						viewBox='0 0 24 24'
-						xmlns='http://www.w3.org/2000/svg'
-					>
-						<path
-							strokeLinecap='round'
-							strokeLinejoin='round'
-							strokeWidth='2'
-							d='M13 10V3L4 14h7v7l9-11h-7z'
-						/>
-					</svg>
-				)} */}
-
 				{loading ? (
 					<svg
 						className='mr-3 h-5 w-5 animate-spin text-white'
