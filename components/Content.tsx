@@ -6,7 +6,8 @@ import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { Product } from '../typings';
 import { urlFor } from '../sanity';
-import { incQty, decQty, removeAllToCart } from '../redux/cartSlice';
+import { removeAllToCart } from '../redux/cartSlice';
+import useQuantity from '../hooks/useQuantity';
 
 interface Props {
 	id: string;
@@ -14,10 +15,9 @@ interface Props {
 	location: 'cartModal' | 'cart';
 }
 
-type QtyProps = 'decQty' | 'incQty';
-
 function Content({ id, contents, location }: Props) {
 	const dispatch = useDispatch();
+	const { itemQuantity } = useQuantity();
 
 	const removeAllContentFromCart = () => {
 		const removeConfirm = window.confirm('해당 상품을 삭제하시겠습니까?');
@@ -31,16 +31,8 @@ function Content({ id, contents, location }: Props) {
 		}
 	};
 
-	const itemQuantity = (qty: QtyProps) => {
-		if (qty === 'incQty') {
-			dispatch(incQty(contents[0]));
-		} else {
-			dispatch(decQty({ id }));
-		}
-	};
-
 	return (
-		<div className='flex flex-row  border-b py-3.5 lg:flex-row '>
+		<div className='flex flex-row border-b py-3.5 lg:flex-row'>
 			<div
 				className={`relative ${
 					location === 'cartModal' ? 'h-24 w-24' : 'h-44 w-44'
@@ -70,16 +62,17 @@ function Content({ id, contents, location }: Props) {
 								<button
 									type='button'
 									className='quantity'
-									onClick={() => itemQuantity('decQty')}
-									disabled={contents.length === 1}
+									onClick={() => itemQuantity('decQty', id)}
+									disabled={contents[0].quantity === 1}
 								>
 									-
 								</button>
-								<span className='quantity'>{contents.length}</span>
+								<span className='quantity'>{contents[0].quantity}</span>
 								<button
 									type='button'
 									className='quantity'
-									onClick={() => itemQuantity('incQty')}
+									onClick={() => itemQuantity('incQty', id)}
+									disabled={contents[0].quantity === contents[0].instock}
 								>
 									+
 								</button>
@@ -91,7 +84,10 @@ function Content({ id, contents, location }: Props) {
 				<div className='flex h-full flex-col justify-between text-sm'>
 					<h4 className='fonts-semiblod'>
 						<CurrencyFormat
-							value={contents.reduce((total, item) => total + item.price, 0)}
+							value={contents.reduce(
+								(total, item) => (total += item.price * item.quantity),
+								0
+							)}
 							displayType='text'
 							thousandSeparator
 							suffix='원'
