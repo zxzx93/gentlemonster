@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Stripe from 'stripe';
 
-// import { formatAmountForStripe } from '../../../utils/stripe-helpers';
 import { Product } from '../../typings';
 import { urlFor } from '../../sanity';
 
@@ -25,22 +24,47 @@ export default async function handler(
 				},
 				unit_amount: item.price, // 원화는 zero-decimal currencies *100 할 필요없음
 			},
-			quantity: 1,
+			quantity: item.quantity,
 		}));
 
 		try {
 			// Create Checkout Sessions from body params.
 			const params: Stripe.Checkout.SessionCreateParams = {
 				mode: 'payment',
-				submit_type: 'donate',
 				payment_method_types: ['card'],
 				payment_intent_data: {},
+				shipping_address_collection: { allowed_countries: ['KR'] },
 				line_items: transformItems,
 				success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
 				cancel_url: `${req.headers.origin}/cart`,
 				metadata: {
 					images: JSON.stringify(items.map(item => item.image[0].asset.url)),
 				},
+				phone_number_collection: {
+					enabled: true,
+				},
+				shipping_options: [
+					{
+						shipping_rate_data: {
+							type: 'fixed_amount',
+							fixed_amount: {
+								amount: 0,
+								currency: 'krw',
+							},
+							display_name: '무료배송',
+							delivery_estimate: {
+								minimum: {
+									unit: 'business_day',
+									value: 2,
+								},
+								maximum: {
+									unit: 'business_day',
+									value: 7,
+								},
+							},
+						},
+					},
+				],
 			};
 
 			const checkoutSession: Stripe.Checkout.Session =
