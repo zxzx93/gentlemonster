@@ -41,6 +41,22 @@ export default {
 			type: 'number',
 		},
 		{
+			name: 'quantity',
+			title: 'Quantity',
+			type: 'number',
+		},
+		{
+			name: 'instock',
+			title: 'Instock',
+			type: 'number',
+		},
+		{
+			name: 'like',
+			title: 'Like',
+			type: 'boolean',
+			initialValue: false,
+		},
+		{
 			name: 'description',
 			title: 'Description',
 			type: 'text',
