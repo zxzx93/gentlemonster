@@ -1,14 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Head from 'next/head';
 import Image from 'next/image';
 import { ParsedUrlQuery } from 'querystring';
 import { GetServerSideProps } from 'next';
+import CurrencyFormat from 'react-currency-format';
 
+import toast from 'react-hot-toast';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
 import { Product } from '../../typings';
 import fetchContentDetail from '../../utils/fetchContentDetail';
 import { urlFor } from '../../sanity';
+import {
+	addToCart,
+	selectCartItems,
+	selectCartTotal,
+} from '../../redux/cartSlice';
+import Modal from '../../components/Modal';
+import useCreateCheckout from '../../hooks/useCreateCheckout';
+import useQuantity from '../../hooks/useQuantity';
 
 interface Params extends ParsedUrlQuery {
 	id: string;
@@ -19,6 +30,49 @@ interface Props {
 }
 
 function ContentDetail({ contentDetail }: Props) {
+	const items = useSelector(selectCartItems);
+	const allTotalPrice = useSelector(selectCartTotal);
+	const dispatch = useDispatch();
+	const { itemQuantity } = useQuantity();
+	const { createCheckout, loading } = useCreateCheckout(); // 결제 hook
+
+	const [showModal, setShowModal] = useState(false); // 모달 show
+
+	const addItemToCart = () => {
+		// if (contentDetail.quantity <= contentDetail.instock) {
+		// 	setShowModal(false);
+		// }
+		const duplicateItemsCheck = items.some(
+			item => item._id === contentDetail._id
+		);
+		if (!duplicateItemsCheck) {
+			dispatch(addToCart(contentDetail));
+			toast.success(`${contentDetail.title}가 카트에 담겼습니다.`, {
+				position: 'bottom-center',
+			});
+		}
+		// else {
+		// 	itemQuantity('incQty', contentDetail._id);
+		// }
+	};
+
+	const [groupedItemsInCart, setGroupedItemsInCart] = useState(
+		{} as { [key: string]: Product[] }
+	);
+
+	useEffect(() => {
+		const groupedItems = items.reduce((results, item) => {
+			(results[item._id] = results[item._id] || []).push(item);
+			// if (!results[item._id]) {
+			// 	results[item._id] = []; // 빈 배열로 초기화
+			// }
+			// results[item._id].push(item);
+			return results;
+		}, {} as { [key: string]: Product[] }); // 초기엔 빈 객체, 타입 정의
+
+		setGroupedItemsInCart(groupedItems);
+	}, [items]);
+
 	return (
 		<>
 			<Head>
@@ -27,7 +81,7 @@ function ContentDetail({ contentDetail }: Props) {
 			</Head>
 			<Header />
 
-			<section className='relative'>
+			<main className='relative'>
 				<div className='flex flex-col justify-between md:flex-row md:pl-5 lg:flex-row'>
 					<div className='basis-2/3'>
 						<div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
@@ -48,7 +102,12 @@ function ContentDetail({ contentDetail }: Props) {
 								{contentDetail.title}
 							</span>
 							<span className='text-sm font-medium'>
-								{contentDetail.price}원
+								<CurrencyFormat
+									value={contentDetail.price}
+									displayType='text'
+									thousandSeparator
+									suffix='원'
+								/>
 							</span>
 						</div>
 
@@ -57,12 +116,28 @@ function ContentDetail({ contentDetail }: Props) {
 						</div>
 
 						<div className='flex flex-col gap-3'>
-							<Button title='쇼핑백에 추가' buttonType='cart' />
+							<Button
+								title='쇼핑백에 추가'
+								buttonColor='black'
+								onClick={() => {
+									addItemToCart();
+									setShowModal(true);
+								}}
+							/>
 							<Button title='관심상품 추가' />
 						</div>
+
+						<Modal
+							showModal={showModal}
+							setShowModal={setShowModal}
+							items={items}
+							groupedItemsInCart={groupedItemsInCart}
+							allTotalPrice={allTotalPrice}
+							checkout={{ createCheckout, loading }}
+						/>
 					</div>
 				</div>
-			</section>
+			</main>
 		</>
 	);
 }

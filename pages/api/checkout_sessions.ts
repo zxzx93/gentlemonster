@@ -4,7 +4,7 @@ import Stripe from 'stripe';
 import { Product } from '../../typings';
 import { urlFor } from '../../sanity';
 
-const stripe = new Stripe(process.env.NEXT_PUBLIC_SANITY_SECRET_KEY!, {
+const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!, {
 	apiVersion: '2022-08-01',
 });
 

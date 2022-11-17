@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { HTMLProps } from 'react';
 
-interface Props {
+interface Props extends HTMLProps<HTMLButtonElement> {
 	title: string;
-	onClick?: () => void;
+	name?: string;
 	width?: string;
 	height?: string;
 	loading?: boolean;
 	padding?: string;
 	noIcon?: boolean;
-	buttonColor?: 'black' | 'white' | 'gray';
+	buttonColor?: string;
 	disabled?: boolean;
+	type?: 'submit' | 'reset' | 'button';
+	// onClick?: () => void;
 }
 
 function Button({
 	title,
-	onClick,
+	name,
+	// onClick,
 	width,
 	height,
 	loading,
@@ -22,19 +25,26 @@ function Button({
 	noIcon,
 	buttonColor,
 	disabled,
+	type,
+	...props
 }: Props) {
+	const buttonBgColor =
+		buttonColor === 'black'
+			? 'bg-black text-white'
+			: buttonColor === '#f7e14c'
+			? 'bg-[#f7e14c] text-black border-none'
+			: 'bg-white text-black';
+
 	return (
 		<button
 			className={`relative box-border inline-flex cursor-pointer items-center justify-center overflow-hidden border border-[#000] text-sm  ${
 				width || 'w-auto'
-			} ${padding} ${
-				buttonColor === 'black'
-					? `bg-black text-white`
-					: 'bg-white text-black'
-			}`}
-			onClick={onClick}
-			type='button'
+			} ${padding} ${buttonBgColor}`}
+			// onClick={onClick}
+			type={type}
 			disabled={disabled}
+			name={name}
+			{...props}
 		>
 			<span
 				className={`relative flex ${

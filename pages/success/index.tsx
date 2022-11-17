@@ -8,6 +8,7 @@ import { BsCheckCircle } from 'react-icons/bs';
 import { HiChevronDown, HiChevronUp } from 'react-icons/hi';
 import CurrencyFormat from 'react-currency-format';
 import { GetServerSideProps } from 'next';
+import { useSession } from 'next-auth/react';
 
 import Button from '../../components/Button';
 import { StripeProducts } from '../../typings';
@@ -19,6 +20,7 @@ interface Props {
 
 function Success({ products }: Props) {
 	const router = useRouter();
+	const { data: session } = useSession();
 	const sessionId = router.query.session_id;
 	const { customer_details: orderAddress, line_items: orderItems } = products;
 	const {
@@ -49,7 +51,7 @@ function Success({ products }: Props) {
 
 	const subTotal = orderItems.reduce(
 		(acc, product) => acc + product.price.unit_amount,
-		0,
+		0
 	);
 
 	return (
@@ -92,8 +94,8 @@ function Success({ products }: Props) {
 								구매번호 #{sessionId?.slice(-5)}
 							</p>
 							<h4 className='text-base font-medium'>
-								주문이 완료 되었습니다.{' '}
-								{/* {session ? session.user?.name?.split(' ')[0] : 'Guest'} */}
+								{session ? session.user?.name?.split(' ')[0] : '고객'}님 주문이
+								완료 되었습니다.
 							</h4>
 						</div>
 					</div>
@@ -117,7 +119,7 @@ function Success({ products }: Props) {
 							<tr>
 								<td>주소</td>
 								<td>
-									[{postalCode}] {`${state} ${city} ${line1} ${line2 ? line2 : ""}`}
+									[{postalCode}] {`${state} ${city} ${line1} ${line2 || ''}`}
 								</td>
 							</tr>
 						</tbody>

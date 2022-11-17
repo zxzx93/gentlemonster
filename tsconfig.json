@@ -15,7 +15,13 @@
 		"jsx": "preserve",
 		"incremental": true
 	},
-	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".eslintrc.json"],
+	"include": [
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"**/*.js",
+		".eslintrc.json",
+	],
 	"exclude": ["node_modules"],
 	"plugins": ["tailwind-scrollbar-hide"]
 }

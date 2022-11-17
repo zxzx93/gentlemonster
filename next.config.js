@@ -7,6 +7,9 @@ module.exports = {
 			'images.surfacemag.com',
 			'web-resource.gentlemonster.com',
 			'cdn.sanity.io',
+			'lh3.googleusercontent.com',
+			'www.gravatar.com',
+			'k.kakaocdn.net',
 		],
 	},
 };

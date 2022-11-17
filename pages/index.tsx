@@ -1,36 +1,104 @@
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import type { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import { Tab } from '@headlessui/react';
+import { getSession, useSession } from 'next-auth/react';
+import type { Session } from 'next-auth';
 
 import Header from '../components/Header';
 import Landing from '../components/Landing';
 import fetchCategories from '../utils/fetchCategoryies';
 import fetchProducts from '../utils/fetchProducts';
 import { Category, Product } from '../typings.d';
-import Content from '../components/Content';
+import LandingContent from '../components/LandingContent';
+import FloatCart from '../components/FloatCart';
+import useWishList from '../hooks/useWishList';
+import {
+	addToWishlist,
+	removeToWishlist,
+	selectWishListItems,
+} from '../redux/wishlistSlice';
 
 interface Props {
 	categories: Category[];
 	products: Product[];
+	// session: Session | null;
 }
 
 function Home({ categories, products }: Props) {
+	const { data: session } = useSession();
+	const dispatch = useDispatch();
+	// const wisiListItems = useSelector(selectWishListItems);
+	const [currentProducts, setCurrentProducts] = useState(products);
+	const { wishLists, setWishLists } = useWishList();
+
+
+	console.log(currentProducts, 'currentProducts');
+	console.log(wishLists, 'wishLists');
+
+	// 선택된 wishList 상품의 like 속성값을 true로 변경하는 useEffect
+	// useEffect(() => {
+	// 	if (wishLists.length > 0) {
+	// 		const newProduct = currentProducts.map(element => {
+	// 			if (wishLists.includes(element)) {
+	// 				return { ...element, like: true };
+	// 			}
+	// 			return element;
+	// 		});
+	// 		setCurrentProducts(newProduct);
+	// 	}
+	// }, [wishLists]);
+
+	const addToWishList = (product: Product) => {
+		if (wishLists.includes(product)) {
+			const newProduct = currentProducts.map((item, index) => {
+				if (item._id === product._id) {
+					const unliked = { ...item, like: false, uuid: index };
+					dispatch(removeToWishlist(unliked));
+					return unliked;
+				}
+				return item;
+			});
+			setCurrentProducts(newProduct);
+			const unlike = wishLists.filter(elem => elem !== product);
+			setWishLists(unlike);
+		} else {
+			const newProduct = currentProducts.map((item, index) => {
+				if (item._id === product._id) {
+					const liked = { ...item, like: true, uuid: index };
+					setWishLists([...wishLists, liked]);
+					dispatch(addToWishlist(liked));
+					return liked;
+				}
+				return item;
+			});
+			setCurrentProducts(newProduct);
+		}
+	};
+
 	const newProducts = (category: number) => {
-		return products
+		return currentProducts
 			.filter(product => product.category._ref === categories[category]._id)
-			.map(product => <Content product={product} key={product._id} />);
+			.map(product => (
+				<LandingContent
+					product={product}
+					key={product._id}
+					addToWishList={addToWishList}
+				/>
+			));
 	};
 
 	return (
-		<div className=''>
+		<>
 			<Head>
 				<title>GENTLEMONSTER</title>
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 			<Header />
+			<FloatCart />
 
-			<main className='relative h-[200vh] '>
+			<main className='relative h-[200vh]'>
 				<Landing />
 			</main>
 
@@ -67,7 +135,7 @@ function Home({ categories, products }: Props) {
 					</Tab.Group>
 				</div>
 			</section>
-		</div>
+		</>
 	);
 }
 
@@ -75,8 +143,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
 	// api call
 	const categories = await fetchCategories();
 	const products = await fetchProducts();
+	const session = await getSession(context);
 
-	return { props: { categories, products } };
+	return { props: { categories, products, session } };
 };
 
 export default Home;

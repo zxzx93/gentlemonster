@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { MouseEvent } from 'react';
+import React, { useState, useEffect, MouseEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { VscChromeClose } from 'react-icons/vsc';
 import CurrencyFormat from 'react-currency-format';
@@ -10,12 +10,15 @@ import { urlFor } from '../sanity';
 import { Product } from '../typings';
 import Button from './Button';
 import { removeToWishlist } from '../redux/wishlistSlice';
+import { addToCart, selectCartItems } from '../redux/cartSlice';
 
 interface Props {
 	item: Product;
+	setShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
-function WishlistContent({ item }: Props) {
+function WishlistContent({ item, setShowModal }: Props) {
+	const cartItems = useSelector(selectCartItems);
 	const dispatch = useDispatch();
 
 	const removeWishlistItem = (
@@ -25,9 +28,28 @@ function WishlistContent({ item }: Props) {
 		e.preventDefault();
 
 		dispatch(removeToWishlist(content));
-		toast.success(`${content.title} 이/가 관심상품에서 삭제 됐습니다.`, {
+		toast.error(`${content.title} 이/가 관심상품에서 삭제 됐습니다.`, {
 			position: 'bottom-center',
 		});
+	};
+
+	const addItemToCart = (e: MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		// if (contentDetail.quantity <= contentDetail.instock) {
+		// 	setShowModal(false);
+		// }
+		const duplicateItemsCheck = cartItems.some(
+			content => content._id === item._id
+		);
+		if (!duplicateItemsCheck) {
+			dispatch(addToCart(item));
+			toast.success(`${item.title}가 카트에 담겼습니다.`, {
+				position: 'bottom-center',
+			});
+		}
+		// else {
+		// 	itemQuantity('incQty', contentDetail._id);
+		// }
 	};
 
 	return (
@@ -61,7 +83,10 @@ function WishlistContent({ item }: Props) {
 							buttonColor='black'
 							width='w-full'
 							height='h-7'
-							// onClick={e => oauthSignIn(e, 'google')}
+							onClick={e => {
+								addItemToCart(e);
+								setShowModal(true);
+							}}
 							// loading={loading}
 							// disabled={!(items.length > 0)}
 						/>

@@ -5,17 +5,17 @@ import { useSelector } from 'react-redux';
 import CurrencyFormat from 'react-currency-format';
 
 import Header from '../../components/Header';
-import { selectCartItems } from '../../redux/cartSlice';
+import { selectCartItems, selectCartTotal } from '../../redux/cartSlice';
 import Button from '../../components/Button';
 import { Product } from '../../typings';
-import CartContent from '../../components/CartContent';
+import Content from '../../components/Content';
+import useCreateCheckout from '../../hooks/useCreateCheckout';
 
 function Cart() {
 	const items = useSelector(selectCartItems);
+	const allTotal = useSelector(selectCartTotal);
 	const router = useRouter();
-
-	const [subTotal, setSubtotal] = useState(0);
-	const [allTotal, setAlltotal] = useState(0);
+	const { createCheckout, loading } = useCreateCheckout();
 
 	const [groupedItemsInCart, setGroupedItemsInCart] = useState(
 		{} as { [key: string]: Product[] }
@@ -47,15 +47,16 @@ function Cart() {
 						<p>상품</p>
 						<p>가격</p>
 					</div>
-					{/* 
-					{items.length === 0 && (
-						<Button title='쇼핑 계속하기' onClick={() => router.push('/')} />
-					)} */}
 
 					{items.length > 0 ? (
-						<div className=''>
+						<div>
 							{Object.entries(groupedItemsInCart).map(([key, contents]) => (
-								<CartContent key={key} id={key} contents={contents} />
+								<Content
+									key={key}
+									id={key}
+									contents={contents}
+									location='cart'
+								/>
 							))}
 						</div>
 					) : (
@@ -72,7 +73,7 @@ function Cart() {
 							<span>소계</span>
 							<span>
 								<CurrencyFormat
-									value={subTotal}
+									value={allTotal}
 									displayType='text'
 									thousandSeparator
 									suffix='원'
@@ -97,7 +98,15 @@ function Cart() {
 					</ul>
 
 					<div className='mt-10'>
-						<Button title='결제하기' buttonType='cart' width='w-full' />
+						<Button
+							title='결제하기'
+							buttonColor='black'
+							width='w-full'
+							height='h-10'
+							loading={loading}
+							onClick={createCheckout}
+							disabled={!(items.length > 0)}
+						/>
 					</div>
 
 					<p className='my-4 mt-6 text-xs leading-6 tracking-tighter'>

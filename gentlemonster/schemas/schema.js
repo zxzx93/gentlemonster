@@ -11,8 +11,6 @@ import product from './product';
 import wishlists from './wishlists';
 import account from './account';
 import user from './user';
-import verificationToken from './verification-token';
-
 import localeString from './locale/String';
 import localeText from './locale/Text';
 import localeBlockContent from './locale/BlockContent';
@@ -37,6 +35,5 @@ export default createSchema({
 		localeString,
 		user,
 		account,
-		verificationToken,
 	]),
 });

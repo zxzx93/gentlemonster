@@ -1,4 +1,4 @@
-import React, { MouseEvent, ChangeEvent, FormEvent } from 'react';
+import React, { MouseEvent, ChangeEvent } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -16,17 +16,15 @@ interface FormProps {
 	title: '로그인' | '회원가입' | '신규가입';
 	buttonTitle: string[];
 	schema?: yup.SchemaOf<LoginInputsForm> | yup.SchemaOf<SignupInputsForm>;
-	// loginForm: LoginInputs;
-	// handleFieldChange: (e: ChangeEvent<HTMLInputElement>) => void;
+	handleFieldChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 function CustomerForm({
 	title,
 	buttonTitle,
 	schema,
-}: // loginForm,
-// handleFieldChange,
-FormProps) {
+	handleFieldChange,
+}: FormProps) {
 	const {
 		register,
 		handleSubmit,
@@ -83,7 +81,12 @@ FormProps) {
 			return (
 				<>
 					<div className='mb-6 text-sm'>
-						<Input label_kr='이메일' label_en='email' register={register} />
+						<Input
+							label_kr='이메일'
+							label_en='email'
+							register={register}
+							handleFieldChange={handleFieldChange}
+						/>
 						<p className='mt-2 text-xs'>{errors.email?.message}</p>
 					</div>
 					<div className='mb-6 text-sm'>
@@ -91,6 +94,7 @@ FormProps) {
 							label_kr='비밀번호'
 							label_en='password'
 							register={register}
+							handleFieldChange={handleFieldChange}
 						/>
 						<p className='mt-2 text-xs'>{errors.password?.message}</p>
 					</div>
@@ -101,11 +105,21 @@ FormProps) {
 			return (
 				<>
 					<div className='mb-6 text-sm'>
-						<Input label_kr='이름' label_en='name' register={register} />
+						<Input
+							label_kr='이름'
+							label_en='name'
+							register={register}
+							handleFieldChange={handleFieldChange}
+						/>
 						<p className='mt-2 text-xs'>{errors.name?.message}</p>
 					</div>
 					<div className='mb-6 text-sm'>
-						<Input label_kr='이메일' label_en='email' register={register} />
+						<Input
+							label_kr='이메일'
+							label_en='email'
+							register={register}
+							handleFieldChange={handleFieldChange}
+						/>
 						<p className='mt-2 text-xs'>{errors.email?.message}</p>
 					</div>
 					<div className='mb-6 text-sm'>
@@ -113,6 +127,7 @@ FormProps) {
 							label_kr='비밀번호'
 							label_en='password'
 							register={register}
+							handleFieldChange={handleFieldChange}
 						/>
 						<p className='mt-2 text-xs'>{errors.password?.message}</p>
 					</div>
@@ -121,6 +136,7 @@ FormProps) {
 							label_kr='비밀번호 확인'
 							label_en='confirmPassword'
 							register={register}
+							handleFieldChange={handleFieldChange}
 						/>
 						<p className='mt-2 text-xs'>{errors.confirmPassword?.message}</p>
 					</div>
@@ -136,7 +152,7 @@ FormProps) {
 	};
 
 	return (
-		<div className='mb-16 w-full max-w-md md:w-8/12 lg:w-5/12 xl:ml-20 xl:w-5/12'>
+		<div className='mb-16 w-full max-w-md lg:w-5/12 xl:ml-20 xl:w-5/12'>
 			<h2 className='mb-7 text-base font-medium'>{title}</h2>
 			<form onSubmit={handleSubmit(handleSubmitForm)}>
 				{formContents()}
