@@ -58,6 +58,7 @@ function SearchModal({ showModal, setShowModal }: SearchModalProps) {
   const goToSearchPage = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push(`/search?term=${searchQuery}`);
+    setShowModal(false);
   };
 
   const resetSearchValue = () => {
