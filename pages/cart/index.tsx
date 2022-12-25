@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
 import { useSelector } from 'react-redux';
 import CurrencyFormat from 'react-currency-format';
 
-import Header from '../../components/Header';
 import { selectCartItems, selectCartTotal } from '../../redux/cartSlice';
 import Button from '../../components/Button';
 import { Product } from '../../typings';
 import Content from '../../components/Content';
 import useCreateCheckout from '../../hooks/useCreateCheckout';
+import Layout from '../../components/Layout';
 
 function Cart() {
   const items = useSelector(selectCartItems);
@@ -29,14 +28,8 @@ function Cart() {
   }, [items]);
 
   return (
-    <div>
-      <Head>
-        <title>Gentlemonster</title>
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-      <Header />
-
-      <main className='flex max-w-[1419px] flex-col gap-8 px-4 pt-5 font-title md:flex-row md:px-12 md:pb-12 md:pt-[150px] lg:gap-20 xl:mx-auto xl:my-0'>
+    <Layout>
+      <div className='flex h-[100vh] max-w-[1419px] flex-col gap-8 px-4 pt-5 font-title md:flex-row md:px-12 md:pb-44 md:pt-[150px] lg:gap-20 xl:mx-auto xl:my-0'>
         {/* 쇼핑백 */}
         <div className='basis-2/3'>
           <h1 className='mb-10 text-base font-semibold text-black'>쇼핑백</h1>
@@ -98,7 +91,7 @@ function Cart() {
           <div className='mt-10'>
             <Button
               title='결제하기'
-              buttonColor='black'
+              buttonColor={items.length ? 'black' : 'gray'}
               width='w-full'
               height='h-10'
               loading={loading}
@@ -112,8 +105,8 @@ function Cart() {
             자세한 내용을 확인하십시오
           </p>
         </div>
-      </main>
-    </div>
+      </div>
+    </Layout>
   );
 }
 

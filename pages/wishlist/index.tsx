@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
 import { useSelector } from 'react-redux';
 
-import Header from '../../components/Header';
 import { selectWishListItems } from '../../redux/wishlistSlice';
 import { selectCartItems, selectCartTotal } from '../../redux/cartSlice';
 import WishlistContent from '../../components/WishlistContent';
 import { Product } from '../../typings';
 import Modal from '../../components/Modal';
 import useCreateCheckout from '../../hooks/useCreateCheckout';
+import Layout from '../../components/Layout';
 
 function WishList() {
   const cartItems = useSelector(selectCartItems);
@@ -36,14 +35,8 @@ function WishList() {
   }, [cartItems]);
 
   return (
-    <div>
-      <Head>
-        <title>Gentlemonster</title>
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-      <Header />
-
-      <main className='flex max-w-[1419px] flex-col gap-8 px-4 pt-5 font-title md:pb-12 lg:gap-20 xl:mx-auto xl:my-0'>
+    <Layout>
+      <div className='flex h-[100vh] max-w-[1419px] flex-col gap-8 px-4 pt-5 pb-44 font-title lg:gap-20 xl:mx-auto xl:my-0'>
         <div>
           <p className='font-bold'>위시리스트({wisiListItems.length})</p>
         </div>
@@ -66,8 +59,8 @@ function WishList() {
             checkout={{ createCheckout, loading }}
           />
         </div>
-      </main>
-    </div>
+      </div>
+    </Layout>
   );
 }
 
