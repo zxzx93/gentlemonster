@@ -55,7 +55,7 @@ function Success({ products }: Props) {
   );
 
   return (
-    <Layout>
+    <Layout floatWishlist>
       <div className='grid grid-cols-1 font-title lg:grid-cols-9'>
         <section className='order-2 mx-auto max-w-xl pb-52 lg:col-span-5 lg:mx-0 lg:max-w-none lg:pr-16 lg:pt-16 xl:pl-16 2xl:pl-44'>
           <Link href='/'>
@@ -123,7 +123,7 @@ function Success({ products }: Props) {
         </section>
 
         {mounted && (
-          <section className='overflow-y-scroll border-y border-l border-gray-300 bg-[#FAFAFA] lg:order-2 lg:col-span-4 lg:h-screen lg:border-y-0'>
+          <section className='no-scrollbar overflow-y-scroll border-y border-l border-gray-300 bg-[#FAFAFA] lg:order-2 lg:col-span-4 lg:h-screen lg:border-y-0'>
             <div
               className={`w-full ${
                 showOrderSummaryCondition && 'border-b'

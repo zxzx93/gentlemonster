@@ -35,8 +35,8 @@ function WishList() {
   }, [cartItems]);
 
   return (
-    <Layout>
-      <div className='flex h-[100vh] max-w-[1419px] flex-col gap-8 px-4 pt-5 pb-44 font-title lg:gap-20 xl:mx-auto xl:my-0'>
+    <Layout floatWishlist>
+      <div className='flex h-full min-h-[780px] max-w-[1419px] flex-col gap-8 px-4 pt-5 pb-44 font-title lg:gap-20 xl:mx-auto xl:my-0'>
         <div>
           <p className='font-bold'>위시리스트({wisiListItems.length})</p>
         </div>

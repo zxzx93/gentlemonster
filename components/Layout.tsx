@@ -1,16 +1,15 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 
-import FloatCart from './FloatCart';
+import FloatWishList from './FloatWishList';
 import Header from './Header';
 
 interface ChildrenProps {
   children: React.ReactNode;
 }
 
-function Layout({ children }: ChildrenProps) {
-  const router = useRouter();
+type Props = { floatWishlist?: boolean } & ChildrenProps;
 
+function Layout({ children, floatWishlist }: Props) {
   return (
     <>
       <Head>
@@ -19,9 +18,9 @@ function Layout({ children }: ChildrenProps) {
       </Head>
       <Header />
 
-      {router.pathname !== '/success' && <FloatCart />}
+      {!floatWishlist && <FloatWishList />}
 
-      <main className=''>{children}</main>
+      <main className='h-[100vh]'>{children}</main>
       <footer className='flex h-20 items-center justify-center shadow-inner'>
         <p>© 2022 GENTLE MONSTER</p>
       </footer>
