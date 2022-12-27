@@ -1,8 +1,6 @@
 import { GetServerSideProps } from 'next';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import Header from '../../components/Header';
 import Layout from '../../components/Layout';
 import SearchContent from '../../components/SearchContent';
 import { Product } from '../../typings';
@@ -17,7 +15,7 @@ function Search({ products }: Props) {
 
   return (
     <Layout>
-      <div className='flex h-full min-h-[780px] max-w-[1419px] flex-col gap-8 px-4 pt-5 font-title md:pb-12 xl:mx-auto xl:my-0'>
+      <div className='flex h-full min-h-[780px] max-w-[1419px] flex-col gap-8 px-4 pb-44 pt-5 font-title md:pb-12 xl:mx-auto xl:my-0'>
         <div>
           <p className='font-bold'>
             "{query && query.term}"({products.length})
