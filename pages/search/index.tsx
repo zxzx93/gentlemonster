@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import Header from '../../components/Header';
+import Layout from '../../components/Layout';
 import SearchContent from '../../components/SearchContent';
 import { Product } from '../../typings';
 import fetchSearchProducts from '../../utils/fetchSearchProducts';
@@ -15,14 +16,8 @@ function Search({ products }: Props) {
   const { query } = useRouter();
 
   return (
-    <>
-      <Head>
-        <title>Gentlemonster</title>
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-      <Header />
-
-      <main className='flex max-w-[1419px] flex-col gap-8 px-4 pt-5 font-title md:pb-12 xl:mx-auto xl:my-0'>
+    <Layout>
+      <div className='flex h-full min-h-[780px] max-w-[1419px] flex-col gap-8 px-4 pt-5 font-title md:pb-12 xl:mx-auto xl:my-0'>
         <div>
           <p className='font-bold'>
             "{query && query.term}"({products.length})
@@ -34,8 +29,8 @@ function Search({ products }: Props) {
             <SearchContent key={product._id} product={product} />
           ))}
         </div>
-      </main>
-    </>
+      </div>
+    </Layout>
   );
 }
 
