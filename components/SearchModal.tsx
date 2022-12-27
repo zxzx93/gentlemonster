@@ -19,6 +19,7 @@ import useDebounce from '../hooks/useDebounce';
 import fetchSearchProducts from '../utils/fetchSearchProducts';
 import { Product } from '../typings';
 import { urlFor } from '../sanity';
+import Loading from './Loading';
 
 interface SearchModalProps {
   showModal: boolean;
@@ -37,8 +38,8 @@ function SearchModal({ showModal, setShowModal }: SearchModalProps) {
 
   useEffect(() => {
     const fetchSearch = async () => {
-      setLoading(true);
       if (debouncedSearch) {
+        setLoading(true);
         const products = await fetchSearchProducts(debouncedSearch);
         setSearchProducts(products);
         setLoading(false);
@@ -50,7 +51,7 @@ function SearchModal({ showModal, setShowModal }: SearchModalProps) {
 
   const searchInputOnChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      setSearchQuery(e.target.value);
+      setSearchQuery(e.target.value.trim());
     },
     [setSearchQuery]
   );
@@ -62,7 +63,8 @@ function SearchModal({ showModal, setShowModal }: SearchModalProps) {
   };
 
   const resetSearchValue = () => {
-    setSearchQuery('');
+    setSearchQuery(''); // 검색하는 input value
+    setSearchProducts(null); // 검색해서 가져온 데이터 비워줌
   };
 
   return (
@@ -129,10 +131,14 @@ function SearchModal({ showModal, setShowModal }: SearchModalProps) {
                   </button>
                 </div>
 
-                <div className='flex w-full max-w-xl basis-5/6 flex-col items-start gap-4 px-5 pb-14 pt-6 md:px-0'>
+                <div className='flex w-full max-w-xl basis-5/6 flex-col gap-4 px-5 pb-14 pt-6 md:px-0'>
                   <h5 className='text-[#acacac]'>연관제품</h5>
-                  {!loading && (
-                    <div className='flex cursor-pointer flex-row gap-4 overflow-x-auto'>
+                  {loading ? (
+                    <span className='m-auto'>
+                      <Loading color='black' />
+                    </span>
+                  ) : (
+                    <div className='no-scroll flex cursor-pointer flex-row gap-4 overflow-x-auto'>
                       {searchProducts?.map(product => (
                         <Link
                           className='flex h-full flex-col gap-3'
