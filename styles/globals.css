@@ -5,64 +5,72 @@
 @tailwind utilities;
 
 @layer base {
-	body {
-		@apply font-body text-[#343434];
-	}
+  body {
+    @apply font-body text-[#343434];
+  }
 }
 @layer utilities {
-	/* Used For Chrome, Opera and Safari */
-	.no-scrollbar::-webkit-scrollbar {
-		display: none;
-	}
-	/* Used For Firefox: */
-	.no-scrollbar {
-		scrollbar-width: none;
-	}
-	/* Used For MS Edge and IE: */
-	.no-scrollbar {
-		-ms-overflow-style: none;
-	}
+  /* Used For Chrome, Opera and Safari */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Used For Firefox: */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  /* Used For MS Edge and IE: */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+  }
 }
 
 @layer components {
-	.headerLink {
-		@apply cursor-pointer text-sm font-bold opacity-100 transition hover:opacity-75;
-	}
+  /* header 관련 css */
+  .headerLink {
+    @apply cursor-pointer text-sm font-bold opacity-100 transition hover:opacity-75;
+  }
 
-	.headerIcon {
-		@apply h-5 w-5 cursor-pointer opacity-100 transition hover:opacity-75;
-	}
+  .headerIcon {
+    @apply h-5 w-5 cursor-pointer opacity-100 transition hover:opacity-75;
+  }
 
-	/* 링크에 호버 했을때 line 나오는 트랜지션 효과*/
-	.link {
-		@apply relative cursor-pointer text-lg font-medium before:absolute before:inset-x-0 before:-bottom-1.5 before:h-0.5 before:origin-left before:scale-x-0 before:transform before:rounded-bl before:bg-black before:transition-all before:duration-200 hover:before:scale-x-100;
-	}
+  .hambergerIcon {
+    @apply block h-px w-5 animate-pulse bg-gray-600;
+  }
 
-	.borderGradient {
-		text-align: center;
-		padding-bottom: 5px;
-		background: linear-gradient(to right, yellow, red) left bottom no-repeat;
-		background-size: 100% 2px;
-	}
+  .hideMenuNav {
+    @apply hidden;
+  }
 
-	.tabPanel {
-		@apply grid grid-cols-1 gap-0 sm:grid-cols-2 md:grid-cols-2  lg:grid-cols-3  xl:grid-cols-4;
-	}
+  .showMenuNav {
+    @apply fixed right-0 top-0 z-50 block flex h-full w-full max-w-[385px] bg-white py-[70px] px-[40px];
+  }
 
-	.checkoutSummary {
-		@apply flex flex-row justify-between font-title;
-	}
+  /* 링크에 호버 했을때 line 나오는 트랜지션 효과*/
+  .link {
+    @apply relative cursor-pointer text-lg font-medium before:absolute before:inset-x-0 before:-bottom-1.5 before:h-0.5 before:origin-left before:scale-x-0 before:transform before:rounded-bl before:bg-black before:transition-all before:duration-200 hover:before:scale-x-100;
+  }
 
-	.quantity {
-		@apply w-[20px] text-xs font-light;
-	}
+  .borderGradient {
+    text-align: center;
+    padding-bottom: 5px;
+    background: linear-gradient(to right, yellow, red) left bottom no-repeat;
+    background-size: 100% 2px;
+  }
 
-	.confirmAlert {
-		z-index: 999999;
-	}
+  .tabPanel {
+    @apply grid grid-cols-1 gap-0 sm:grid-cols-2 md:grid-cols-2  lg:grid-cols-3  xl:grid-cols-4;
+  }
 
-	/* login form input */
-	.loginInput {
-	@apply ease-in-out focus:bg-white m-0 block h-10 w-full border border-solid border-black bg-white bg-clip-padding px-4 text-sm font-normal text-gray-700 transition focus:text-gray-700 focus:outline-none;
-	}
+  .checkoutSummary {
+    @apply flex flex-row justify-between font-title;
+  }
+
+  .quantity {
+    @apply w-[20px] text-xs font-light;
+  }
+
+  /* .confirmAlert {
+    z-index: 999999;
+  } */
 }
