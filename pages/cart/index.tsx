@@ -19,10 +19,13 @@ function Cart() {
   );
 
   useEffect(() => {
-    const groupedItems = items.reduce((results, item) => {
-      (results[item._id] = results[item._id] || []).push(item);
-      return results;
-    }, {} as { [key: string]: Product[] }); // 초기엔 빈 객체, 타입 정의
+    const groupedItems = items.reduce(
+      (group, item) => ({
+        ...group,
+        [item._id]: (group[item._id] || []).concat(item),
+      }),
+      {} as { [key: string]: Product[] }
+    );
 
     setGroupedItemsInCart(groupedItems);
   }, [items]);

@@ -22,14 +22,13 @@ function WishList() {
   );
 
   useEffect(() => {
-    const groupedItems = cartItems.reduce((results, item) => {
-      (results[item._id] = results[item._id] || []).push(item);
-      // if (!results[item._id]) {
-      // 	results[item._id] = []; // 빈 배열로 초기화
-      // }
-      // results[item._id].push(item);
-      return results;
-    }, {} as { [key: string]: Product[] }); // 초기엔 빈 객체, 타입 정의
+    const groupedItems = cartItems.reduce(
+      (group, item) => ({
+        ...group,
+        [item._id]: (group[item._id] || []).concat(item),
+      }),
+      {} as { [key: string]: Product[] }
+    );
 
     setGroupedItemsInCart(groupedItems);
   }, [cartItems]);

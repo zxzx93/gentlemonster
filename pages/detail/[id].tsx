@@ -36,14 +36,11 @@ function ContentDetail({ products, contentDetail }: Props) {
   const allTotalPrice = useSelector(selectCartTotal);
 
   const { createCheckout, loading } = useCreateCheckout(); // 결제 hook
-  const { addToWishList } = useWishList({ products }); // 관심상품 추가 hook
+  // const { addToWishList } = useWishList({ products }); // 관심상품 추가 hook
 
   const [showModal, setShowModal] = useState(false); // cart 모달 show
 
   const addItemToCart = () => {
-    // if (contentDetail.quantity <= contentDetail.instock) {
-    // 	setShowModal(false);
-    // }
     const duplicateItemsCheck = items.some(
       item => item._id === contentDetail._id
     );
@@ -53,9 +50,6 @@ function ContentDetail({ products, contentDetail }: Props) {
         position: 'bottom-center',
       });
     }
-    // else {
-    // 	itemQuantity('incQty', contentDetail._id);
-    // }
   };
 
   const [groupedItemsInCart, setGroupedItemsInCart] = useState(
@@ -63,14 +57,13 @@ function ContentDetail({ products, contentDetail }: Props) {
   );
 
   useEffect(() => {
-    const groupedItems = items.reduce((results, item) => {
-      (results[item._id] = results[item._id] || []).push(item);
-      // if (!results[item._id]) {
-      // 	results[item._id] = []; // 빈 배열로 초기화
-      // }
-      // results[item._id].push(item);
-      return results;
-    }, {} as { [key: string]: Product[] }); // 초기엔 빈 객체, 타입 정의
+    const groupedItems = items.reduce(
+      (group, item) => ({
+        ...group,
+        [item._id]: (group[item._id] || []).concat(item),
+      }),
+      {} as { [key: string]: Product[] } // 초기엔 빈 객체, 타입 정의
+    );
 
     setGroupedItemsInCart(groupedItems);
   }, [items]);
@@ -91,7 +84,7 @@ function ContentDetail({ products, contentDetail }: Props) {
           </div>
         </div>
 
-        <div className='mx-4 basis-1/3 md:mx-8 lg:mx-10 2xl:basis-2/12'>
+        <div className='mx-4 min-w-[400px] basis-1/3 md:mx-8 lg:mx-10 2xl:basis-2/12'>
           <div className='flex flex-col justify-between py-11 md:flex-row md:items-center md:pt-28'>
             <span className='mb-2.5 font-title text-xl font-bold md:mb-0'>
               {contentDetail.title}
@@ -121,6 +114,7 @@ function ContentDetail({ products, contentDetail }: Props) {
             />
             <Button
               title='관심상품 추가'
+              buttonColor='white'
               onClick={() => {
                 // TODO 상품 디테일에서 관심상품 추가시에 중복 금지. 지금은 uuid가 새로 생성되기 때문에 중복 체크가 안되고 있음.
                 // addToWishList(contentDetail);
