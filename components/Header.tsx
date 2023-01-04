@@ -31,6 +31,7 @@ function Header() {
           <Link href='/'>
             <div className='relative ml-4 h-16 w-48 cursor-pointer transition lg:hidden'>
               <Image
+                alt='로고'
                 src='https://images.surfacemag.com/app/uploads/2017/06/gentlemonsterlogo-1024x83.png'
                 objectFit='contain'
                 layout='fill'
@@ -85,11 +86,11 @@ function Header() {
             {session ? (
               <Image
                 className='cursor-pointer rounded-full'
+                alt='사용자 이미지'
                 src={
                   session.user?.image ||
                   'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'
                 }
-                alt=''
                 width={34}
                 height={34}
                 onClick={() => signOut()}

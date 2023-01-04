@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 import { Product } from '../typings';
 import { urlFor } from '../sanity';
-import { removeAllToCart } from '../redux/cartSlice';
+import { removeToCart } from '../redux/cartSlice';
 import useQuantity from '../hooks/useQuantity';
 
 interface Props {
@@ -24,7 +24,7 @@ function Content({ id, contents, location }: Props) {
     const removeConfirm = window.confirm('해당 상품을 삭제하시겠습니까?');
 
     if (removeConfirm) {
-      dispatch(removeAllToCart({ id }));
+      dispatch(removeToCart({ id }));
 
       toast.error(`${contents[0].title}를 삭제했습니다.`, {
         position: 'bottom-center',
@@ -42,6 +42,7 @@ function Content({ id, contents, location }: Props) {
         >
           <Image
             src={urlFor(contents[0].image[0]).url()}
+            alt='상품 이미지'
             layout='fill'
             objectFit='contain'
           />
@@ -87,10 +88,10 @@ function Content({ id, contents, location }: Props) {
         <div className='flex h-full flex-col justify-between text-sm'>
           <h4 className='fonts-semiblod'>
             <CurrencyFormat
-              value={contents.reduce(
-                (total, item) => (total += item.price * item.quantity),
-                0
-              )}
+              value={contents.reduce((total, item) => {
+                let TotalPrice: number = total;
+                return (TotalPrice += item.price * item.quantity);
+              }, 0)}
               displayType='text'
               thousandSeparator
               suffix='원'

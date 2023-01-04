@@ -14,7 +14,12 @@ function SearchContent({ product }: Props) {
   return (
     <Link href={`/detail/${product._id}`}>
       <div className='cursor-pointer'>
-        <Image src={urlFor(product.image[0]).url()} width='430' height='550' />
+        <Image
+          alt='검색 상품 이미지'
+          src={urlFor(product.image[0]).url()}
+          width='430'
+          height='550'
+        />
         <div className='mt-2'>
           <p className='text-sm font-semibold'>{product.title}</p>
           <p className='font-base text-[0.9em]'>

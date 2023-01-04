@@ -75,6 +75,7 @@ function ContentDetail({ products, contentDetail }: Props) {
           <div className='grid grid-cols-1 gap-4 lg:grid-cols-2'>
             {contentDetail.image.map(image => (
               <Image
+                alt='상품 이미지'
                 src={urlFor(image).url()}
                 width={500}
                 height={750}

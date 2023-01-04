@@ -138,15 +138,16 @@ function SearchModal({ showModal, setShowModal }: SearchModalProps) {
                       <Loading color='black' />
                     </span>
                   ) : (
-                    <div className='no-scroll flex cursor-pointer flex-row gap-4 overflow-x-auto'>
+                    <div className='no-scroll flex min-w-[500px] flex-row gap-4 overflow-x-auto'>
                       {searchProducts?.map(product => (
                         <Link
-                          className='flex h-full flex-col gap-3'
+                          className='flex h-full cursor-pointer flex-col gap-3'
                           key={product._id}
                           href={`/detail/${product._id}`}
                         >
-                          <div>
+                          <div className='z-10 cursor-pointer'>
                             <Image
+                              alt='검색 모달 상품 이미지'
                               src={urlFor(product.image[0]).url()}
                               width={110}
                               height={150}

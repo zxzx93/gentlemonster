@@ -9,16 +9,24 @@ import { GetServerSideProps } from 'next';
 import { useSession } from 'next-auth/react';
 
 import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from '../../components/Button';
 import { StripeProducts } from '../../typings';
 import fetchLineItems from '../../utils/fetchLineItems';
 import Layout from '../../components/Layout';
+import {
+  clearCart,
+  selectCartItems,
+  selectCartTotal,
+} from '../../redux/cartSlice';
+import { urlFor } from '../../sanity';
 
 interface Props {
   products: StripeProducts;
 }
 
 function Success({ products }: Props) {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { data: session } = useSession();
   const sessionId = router.query.session_id;
@@ -30,6 +38,8 @@ function Success({ products }: Props) {
     line2,
     postal_code: postalCode,
   } = orderAddress.address;
+  const cartItems = useSelector(selectCartItems);
+  const cartTotal = useSelector(selectCartTotal);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -49,25 +59,16 @@ function Success({ products }: Props) {
     ? HiChevronUp
     : HiChevronDown;
 
-  const subTotal = orderItems.reduce(
-    (acc, product) => acc + product.price.unit_amount,
-    0
-  );
+  const resetCart = () => {
+    router.push('/');
+    localStorage.clear();
+    dispatch(clearCart());
+  };
 
   return (
     <Layout floatWishlist>
       <div className='grid grid-cols-1 font-title lg:grid-cols-9'>
         <section className='order-2 mx-auto max-w-xl pb-52 lg:col-span-5 lg:mx-0 lg:max-w-none lg:pr-16 lg:pt-16 xl:pl-16 2xl:pl-44'>
-          <Link href='/'>
-            <div className='relative ml-14 hidden  h-16 w-48 cursor-pointer transition lg:inline-flex'>
-              <Image
-                src='https://images.surfacemag.com/app/uploads/2017/06/gentlemonsterlogo-1024x83.png'
-                objectFit='contain'
-                layout='fill'
-              />
-            </div>
-          </Link>
-
           <div className='my-8 ml-4 flex space-x-4 lg:ml-14'>
             <div className='flex h-11 w-11 items-center justify-center rounded-full  border-black'>
               <BsCheckCircle className='h-8 w-8' />
@@ -112,7 +113,7 @@ function Success({ products }: Props) {
             {mounted && (
               <Button
                 title='쇼핑 계속하기'
-                onClick={() => router.push('/')}
+                onClick={resetCart}
                 width={isTabletOrMobile ? 'w-full' : undefined}
                 buttonColor='black'
                 padding='p-3'
@@ -141,7 +142,7 @@ function Success({ products }: Props) {
 
                 <p className='text-xl font-medium'>
                   <CurrencyFormat
-                    value={subTotal}
+                    value={cartTotal}
                     displayType='text'
                     thousandSeparator
                     suffix='원'
@@ -153,17 +154,19 @@ function Success({ products }: Props) {
             {showOrderSummaryCondition && (
               <div className='mx-auto max-w-xl divide-y border-gray-300 px-4 py-4 lg:mx-0 lg:max-w-lg lg:px-10 lg:py-16'>
                 <div className='space-y-4 pb-4'>
-                  {orderItems.map(product => (
+                  {cartItems.map(product => (
                     <div
-                      key={product.id}
+                      key={product._id}
                       className='flex items-center space-x-4 text-sm font-medium'
                     >
-                      <div className='relative flex h-16 w-16 items-center justify-center rounded-md border border-gray-300 bg-[#F1F1F1] text-xs text-white'>
-                        <div className='relative h-7 w-7 animate-bounce rounded-md'>
+                      <div className='relative flex h-16 w-16 items-center justify-center rounded-md border border-gray-300 text-xs text-white'>
+                        <div className='relative h-full w-full overflow-hidden'>
                           <Image
-                            src='https://images.surfacemag.com/app/uploads/2017/06/gentlemonsterlogo-1024x83.png'
-                            layout='fill'
-                            objectFit='contain'
+                            alt='주문 완료 상품 이미지'
+                            src={urlFor(product.image[0]).url()}
+                            width={80}
+                            height={80}
+                            key={product._id}
                           />
                         </div>
                         <div className='absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[gray] text-xs'>
@@ -171,10 +174,10 @@ function Success({ products }: Props) {
                         </div>
                       </div>
 
-                      <p className='flex-1'>{product.description}</p>
+                      <p className='flex-1'>{product.title}</p>
                       <p>
                         <CurrencyFormat
-                          value={product.price.unit_amount}
+                          value={product.price * product.quantity}
                           displayType='text'
                           thousandSeparator
                           suffix='원'
@@ -189,7 +192,7 @@ function Success({ products }: Props) {
                     <p className='text-[gray]'>소계</p>
                     <p className='font-medium'>
                       <CurrencyFormat
-                        value={subTotal}
+                        value={cartTotal}
                         displayType='text'
                         thousandSeparator
                         suffix='원'
@@ -207,7 +210,7 @@ function Success({ products }: Props) {
                     <p className='flex items-center gap-x-2 text-xs text-[gray]'>
                       <span className='text-xl font-medium text-black'>
                         <CurrencyFormat
-                          value={subTotal}
+                          value={cartTotal}
                           displayType='text'
                           thousandSeparator
                           suffix='원'
